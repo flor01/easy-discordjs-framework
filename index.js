@@ -7,7 +7,7 @@ module.exports = exports = class Framework {
 		this.client = new Client();
 		this.client.configuration = new (require("./configuration"))();
 		this.client.handler = new (require("./util/handler"));
-
+		if (typeof settings == "string") settings = { token: settings }
 		this.configure(settings);
 
 		this.client.load = new (require("./util/load"))(this.client);
@@ -36,7 +36,7 @@ module.exports = exports = class Framework {
 		return this;
 	}
 	async connect() {
-		await this.client.login(this.client.configuration.getSetting("token"));
+		this.client.login(this.client.configuration.getSetting("token"));
 		return this;
 	}
 
@@ -95,7 +95,7 @@ module.exports = exports = class Framework {
 			for (let command in modules[module]) {
 				const cmd = modules[module][command]
 				if (cmd === true) {
-					this.client.load.moduleloader(resolve(__dirname, `./${module}/${command}.js`));
+					this.client.load.moduleloader(resolve(__dirname, `./${module}/commands/${command}.js`));
 				}
 			}
 		}
