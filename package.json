@@ -12,7 +12,7 @@
     "framework"
   ],
   "author": "Flor",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "chalk": "^4.1.0",
     "discord.js": "^12.5.1",
@@ -22,5 +22,14 @@
     "moment": "^2.29.1",
     "path": "^0.12.7",
     "sqlite3": "^5.0.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flor01/easy-discordjs-framework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/flor01/easy-discordjs-framework/issues"
+  },
+  "homepage": "https://github.com/flor01/easy-discordjs-framework#readme"
 }
