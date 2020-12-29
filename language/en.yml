@@ -1,0 +1,9 @@
+ready: "%CLIENT% is ready! I've loaded %COMMANDS% command(s), %EVENTS% event(s) and %DEFAULT% default commands!"
+lang: "NL"
+by: "by"
+err:
+  notInVoice: "You are not in a voice channel!"
+  notInSameVoice: "You are not in the same voice channel as I am!"
+  noPerms: "I don't have enough permissions to execute %COMMAND% :\n%MISSING%"
+  cmdErr: "Something went wrong while executing %COMMAND%... Error:\n%ERROR%"
+  defcmdErr: "Something went wrong while executing the default command %COMMAND%... Error:\n%ERROR%\n\nPlease let this know to @Flor#2081 !"

@@ -1,0 +1,26 @@
+{
+  "name": "easy-discordjs-framework",
+  "version": "1.0.6",
+  "description": "Een simpele manier om een dc bot te maken!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "discordjs",
+    "discord.js",
+    "framework"
+  ],
+  "author": "Flor",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "discord.js": "^12.5.1",
+    "fsscanner": "^1.0.23",
+    "js-yaml": "^3.14.1",
+    "lodash.merge": "^4.6.2",
+    "moment": "^2.29.1",
+    "path": "^0.12.7",
+    "sqlite3": "^5.0.0"
+  }
+}
