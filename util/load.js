@@ -49,7 +49,7 @@ module.exports = exports = class Load {
                     }
                 })
             })
-        }
+        } else console.log(`no: ${dir}`)
     }
     eventloader(dir = `${process.cwd()}/events`) {
         if (existsSync(dir)) {
@@ -69,7 +69,7 @@ module.exports = exports = class Load {
             let command = require(dir);
             this.client.defaultCommands.set(command.name, command);
 
-        }
+        } //else console.log(`geen ${dir}`)
     }
 
 }

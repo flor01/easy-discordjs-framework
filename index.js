@@ -85,17 +85,15 @@ module.exports = exports = class Framework {
 
 	registerModules(options = {}) {
 		let defaultModules = {
-			moderation: { kick: true, ban: true }, music: {}
+			moderation: { kick: true }, music: {}
 		};
 		const modules = merge(defaultModules, options);
-
-		console.log("modules:", modules)
 
 		for (let module in modules) {
 			for (let command in modules[module]) {
 				const cmd = modules[module][command]
 				if (cmd === true) {
-					this.client.load.moduleloader(resolve(__dirname, `./${module}/commands/${command}.js`));
+					this.client.load.moduleloader(resolve(__dirname, `./commands/${module}/${command}.js`));
 				}
 			}
 		}
