@@ -13,8 +13,7 @@ const client = new module({
     token: "TOKEN", // Bot token
     language: "NL", // NL/EN
     prefix: "!", // prefix => !help, !rank, ..
-});
-client.connect();
+}).connect();
 ```
 3. Make commands folder with command file
 
