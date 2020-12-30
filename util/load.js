@@ -11,8 +11,12 @@ module.exports = exports = class Load {
         this.client.commands = new Collection();
         this.client.events = new Collection();
         this.client.defaultCommands = new Collection();
-        this.cmdloader();
-        this.eventloader();
+        if (this.client.configuration.getSetting('commands')) {
+            this.cmdloader();
+        }
+        if (this.client.configuration.getSetting('commands')) {
+            this.eventloader();
+        }
 
         this.client.util = {
             load: require("./load"),
@@ -49,7 +53,7 @@ module.exports = exports = class Load {
                     }
                 })
             })
-        } else console.log(`no: ${dir}`)
+        }
     }
     eventloader(dir = `${process.cwd()}/events`) {
         if (existsSync(dir)) {
@@ -65,11 +69,23 @@ module.exports = exports = class Load {
         }
     }
     moduleloader(dir) {
-        if (existsSync(dir)) {
-            let command = require(dir);
+        try {
+            let command = require(dir)
             this.client.defaultCommands.set(command.name, command);
-
-        } //else console.log(`geen ${dir}`)
+        } catch (e) {
+            console.log(`Kan module niet vinden: ${dir}`);
+        }
+    }
+    modulegrouploader(dir) {
+        if (existsSync(dir)) {
+            fsscanner.scan(dir, [], (err, results) => {
+                if (err) throw err;
+                results.forEach(file => {
+                    if (statSync(file).isDirectory()) this.modulegrouploader(file);
+                    else this.moduleloader(file);
+                })
+            })
+        } else console.log(`Kan group niet vinden: ${dir}`);
     }
 
 }

@@ -7,7 +7,7 @@ module.exports = exports = class Framework {
 		this.client = new Client();
 		this.client.configuration = new (require("./configuration"))();
 		this.client.handler = new (require("./util/handler"));
-		if (typeof settings == "string") settings = { token: settings }
+
 		this.configure(settings);
 
 		this.client.load = new (require("./util/load"))(this.client);
@@ -36,7 +36,7 @@ module.exports = exports = class Framework {
 		return this;
 	}
 	async connect() {
-		this.client.login(this.client.configuration.getSetting("token"));
+		await this.client.login(this.client.configuration.getSetting("token"));
 		return this;
 	}
 
@@ -83,18 +83,17 @@ module.exports = exports = class Framework {
 		return this;
 	}
 
-	registerModules(options = {}) {
+	registerModules(options = {}, settings) {
 		let defaultModules = {
 			moderation: { kick: true }, music: {}
 		};
 		const modules = merge(defaultModules, options);
 
 		for (let module in modules) {
+			if (modules[module] === true) this.client.load.modulegrouploader(resolve(__dirname, `./commands/${module}`));
 			for (let command in modules[module]) {
 				const cmd = modules[module][command]
-				if (cmd === true) {
-					this.client.load.moduleloader(resolve(__dirname, `./commands/${module}/${command}.js`));
-				}
+				if (cmd === true) this.client.load.moduleloader(resolve(__dirname, `./commands/${module}/${command}.js`));
 			}
 		}
 		return this;

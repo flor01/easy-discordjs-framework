@@ -7,20 +7,13 @@ The bot also activates the commands when executed.
 1. Install module: `npm install easy-discordjs-framework`
 2. Make index.js with code: 
 ```javascript
-const framework = require("easy-discordjs-framework");
+const module = require("easy-discordjs-framework");
 
-const client = new framework({
+const client = new module({
     token: "TOKEN", // Bot token
     language: "NL", // NL/EN
     prefix: "!", // prefix => !help, !rank, ..
 });
-client.connect();
-```
-* Other way to make the bot:
-```javascript
-const framework = require("easy-discordjs-framework");
-
-const client = new framework("TOKEN");
 client.connect();
 ```
 3. Make commands folder with command file

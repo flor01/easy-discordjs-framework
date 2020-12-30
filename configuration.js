@@ -51,6 +51,12 @@ module.exports = class Configuration {
                 'type': '',
                 'default': true
             },
+            {
+                'name': 'events',
+                'description': "Load events",
+                'type': '',
+                'default': true
+            }
         ]
 
     }

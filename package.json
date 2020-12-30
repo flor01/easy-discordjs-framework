@@ -1,18 +1,35 @@
 {
-  "name": "easy-discordjs-framework",
-  "version": "1.0.9",
-  "description": "Een simpele manier om een dc bot te maken!",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "_from": "easy-discordjs-framework@^1.0.3",
+  "_id": "easy-discordjs-framework@1.0.7",
+  "_inBundle": false,
+  "_integrity": "sha512-rWCht/Diy39qBAZB/p7iA0V3OayPqeNSR/JC1mZzxxa3YD+YZ2gokTKz+sUSNLZ18Heuu1NyPPKC7JovKSiimg==",
+  "_location": "/easy-discordjs-framework",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "easy-discordjs-framework@^1.0.3",
+    "name": "easy-discordjs-framework",
+    "escapedName": "easy-discordjs-framework",
+    "rawSpec": "^1.0.3",
+    "saveSpec": null,
+    "fetchSpec": "^1.0.3"
   },
-  "keywords": [
-    "discordjs",
-    "discord.js",
-    "framework"
+  "_requiredBy": [
+    "#USER",
+    "/"
   ],
-  "author": "Flor",
-  "license": "MIT",
+  "_resolved": "https://registry.npmjs.org/easy-discordjs-framework/-/easy-discordjs-framework-1.0.7.tgz",
+  "_shasum": "a2c654d923c573d2ecf44137631181f1832e1894",
+  "_spec": "easy-discordjs-framework@^1.0.3",
+  "_where": "C:\\Users\\florv\\OneDrive\\Documents\\Flor\\Programmeren\\Discord bots\\mytestpackage-testing",
+  "author": {
+    "name": "Flor"
+  },
+  "bugs": {
+    "url": "https://github.com/flor01/easy-discordjs-framework/issues"
+  },
+  "bundleDependencies": false,
   "dependencies": {
     "chalk": "^4.1.0",
     "discord.js": "^12.5.1",
@@ -23,13 +40,24 @@
     "path": "^0.12.7",
     "sqlite3": "^5.0.0"
   },
+  "deprecated": false,
+  "description": "Een simpele manier om een dc bot te maken!",
   "devDependencies": {},
+  "homepage": "https://github.com/flor01/easy-discordjs-framework#readme",
+  "keywords": [
+    "discordjs",
+    "discord.js",
+    "framework"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "easy-discordjs-framework",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/flor01/easy-discordjs-framework.git"
   },
-  "bugs": {
-    "url": "https://github.com/flor01/easy-discordjs-framework/issues"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "homepage": "https://github.com/flor01/easy-discordjs-framework#readme"
+  "version": "1.0.7"
 }

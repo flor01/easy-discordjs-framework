@@ -101,7 +101,7 @@ module.exports = exports = class MessageFunctions {
 
             if (message.guild) {
                 message.guild.settings = client.db.get(`guild-${message.guild.id}`);
-                if (!message.guild.settings) message.guild.settings = client.config.guildSettings;
+                if (!message.guild.settings || !message.guild.settings.prefix) message.guild.settings = client.configuration.getSetting("guildSettings");
                 message.guild.updateDB = async function () {
                     client.db.set(`guild-${message.guild.id}`, message.guild.settings);
                     return message.author.guildSettings;
