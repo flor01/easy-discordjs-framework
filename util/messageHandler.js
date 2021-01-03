@@ -4,7 +4,7 @@ module.exports = exports = class MessageHandler extends require("./messageFuncti
         if (client.igbots && message.author.bot) return;
         if (!message.content && !message.embeds) return;
 
-        const prefix = message.guild.settings.prefix || client.configuration.getSetting("defaultPrefix");
+        const prefix = message.guild.settings.prefix || client.config.getSetting("defaultPrefix");
 
         this.args = message.content.slice(prefix.length).trim().split(/ +/);
         this.command = this.args.shift().toLowerCase();
@@ -21,7 +21,9 @@ module.exports = exports = class MessageHandler extends require("./messageFuncti
         } else {
 
             if (!this.command) return;
-            let cmd = client.commands.get(this.command) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(this.command)) || client.defaultCommands.get(this.command) || client.defaultCommands.find(cmd => cmd.aliases && cmd.aliases.includes(this.command))
+            let command = client.commands.get(this.command) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(this.command));
+            let defaultcmd = client.defaultCommands.get(this.command) || client.defaultCommands.find(cmd => cmd.aliases && cmd.aliases.includes(this.command));
+            let cmd = command || defaultcmd;
             if (cmd && message.content.startsWith(prefix)) {
                 if (cmd.permission) {
                     if (cmd.permission == 1 && !message.member.isMod()) return message.error(client.l.err.noUserPerms.replace("%ROLE%", "mod"));
@@ -29,11 +31,14 @@ module.exports = exports = class MessageHandler extends require("./messageFuncti
                 }
 
                 if (cmd.args && this.args.length < cmd.args) {
-                    let reply = client.l.err.notEnoughArgs;
-                    if (cmd.usage) reply += `\n${client.l.err.useLikeThis} \`${client.config.prefix}${cmd.name} ${cmd.usage}\``;
-                    return message.error(reply)
+                    if (cmd.usage) return message.error(client.l.err.notEnoughArgs + `\n${client.l.err.useLikeThis} \`${prefix}${cmd.name} ${cmd.usage.replace("%REASON%", client.l._reason)}\``);
+                    return message.error(client.l.err.notEnoughArgs);
                 }
-                cmd.run(client, message, this.args).catch(e => {
+
+                let options = {};
+                if (defaultcmd) { }; // later
+
+                cmd.run(client, message, this.args, options).catch(e => {
                     return message.error(client.l.err.cmdErr.replace("%COMMAND%", message.guild.settings.prefix || client.defaultPrefix + cmd.name).replace("%ERROR%", e));
                 })
             }

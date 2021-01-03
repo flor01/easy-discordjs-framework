@@ -1,95 +1,39 @@
 module.exports = class Configuration {
     constructor() {
         this.loaded = false;
-        this.data = new Map();
-        this.optionSchema = [
-            {
-                'name': 'token',
-                'description': 'The secret bot token',
-                'type': 'string',
-                'default': ''
-            },
-            {
-                'name': 'language',
-                'description': 'The language of the framework',
-                'type': 'string',
-                'default': 'EN'
-            },
-            {
-                'name': 'defaultPrefix',
-                'description': 'The prefix for your bot commands',
-                'type': 'string',
-                'default': '!'
-            },
-            {
-                'name': 'guildSettings',
-                'description': '',
-                'type': 'object',
-                'default': '{}'
-            },
-            {
-                'name': 'userSettings',
-                'description': '',
-                'type': 'object',
-                'default': '{}'
-            },
-            {
-                'name': 'igbots',
-                'description': 'Ignore bots',
-                'type': 'boolean',
-                'default': true
-            },
-            {
-                'name': 'igdm',
-                'description': 'Ignore dms',
-                'type': 'boolean',
-                'default': true
-            },
-            {
-                'name': 'commands',
-                'description': 'Load commands',
-                'type': '',
-                'default': true
-            },
-            {
-                'name': 'events',
-                'description': "Load events",
-                'type': '',
-                'default': true
-            }
-        ]
-
+        this.data = {};
     }
 
-    options() {
-        return this.optionSchema.reduce((options, option) => {
-            options.push(option.name);
-            return options;
-        }, []);
-    }
-    getSchema(option) {
-        return this.optionSchema.find(sch => sch.name == option);
-    }
     getSetting(option) {
-        return this.data.get(option);
+        return this.data[option];
     }
     setSetting(option, value) {
-        return this.data.set(option, value);
+        return this.data[option] = value;
     }
 
-    load(settings) {
-        this.data.clear();
-
-        const options = this.options();
-
-        for (let option of options) {
-            let defaultVal = this.getSchema(option).default;
-            if (settings[option] !== undefined) {
-                this.data.set(option, settings[option]);
-            } else if (defaultVal !== undefined) {
-                this.data.set(option, defaultVal);
-            } else throw new Error(`Can't find option ${option}!`)
+    load(config) {
+        const { token, language, defaultPrefix, database, settings, igbots, igdm, commands, events, status, statusType, logs } = config;
+        this.data = {
+            token: token,
+            language: language || "en",
+            defaultPrefix: defaultPrefix || "!",
+            database: database !== undefined ? database : true,
+            settings: {
+                guild: settings && settings.guild || { prefix: defaultPrefix || "!" },
+                user: settings && settings.user || {}
+            },
+            igbots: igbots !== undefined ? igbots : true,
+            igdm: igdm !== undefined ? igdm : true,
+            commands: commands !== undefined ? commands : true,
+            events: events !== undefined ? events : true,
+            status: status || "test",
+            statusType: statusType !== undefined ? statusType.toUpperCase() : "WATCHING",
+            logs: {
+                log: logs && logs.log || "",
+                moderation: logs && logs.moderation || "",
+            },
         }
+        console.log(this.data);
         return this.data;
     }
 }

@@ -1,9 +1,19 @@
 ready: "%CLIENT% is klaar! Ik heb %COMMANDS% command(s), %EVENTS% event(s) en %DEFAULT% standaard commands ingeladen!"
 lang: "NL"
-by: "door"
+_reason: "reden"
+_by: "door"
+_channel: "kanaal"
+
 err:
   notInVoice: "Je zit niet in een spraakkanaal!"
   notInSameVoice: "Je zit niet in hetzelfde spraakkanaal als ik!"
   noPerms: "Ik mis de volgende permissies om het command %COMMAND% uit te voeren:\n%MISSING%"
   cmdErr: "Er ging iets fout tijdens het uitvoeren van commando %COMMAND%... Error:\n%ERROR%"
-  defcmdErr: "Er ging iets fout tijdens het uitvoeren van het default commando %COMMAND%... Error:\n%ERROR%\n\nLaat dit aub weten aan @Flor#2081 !"
+  defcmdErr: "Er ging iets fout tijdens het uitvoeren van het default commando %COMMAND%... Error:\n%ERROR%\n\nLaat dit aub weten aan @Flor#2081"
+  noMember: "Je hebt geen member meegegeven!"
+  notEnoughArgs: "Je hebt niet genoeg argumenten meegegeven!"
+  useLikeThis: "Gebruik het commando zo:"
+
+commands: 
+  kick:
+    succes: "I heb succesvol %USER% gekicked!"

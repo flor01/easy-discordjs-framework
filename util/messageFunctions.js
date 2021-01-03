@@ -5,14 +5,14 @@ module.exports = exports = class MessageFunctions {
 
         message.embed = () => {
             return new MessageEmbed()
-                .setColor(client.configuration.getSetting("embedColor") || "#0e64ed")
+                .setColor(client.config.getSetting("embedColor") || "#0e64ed")
                 .setTimestamp()
-                .setFooter(`© ${client.configuration.getSetting("servername") || message.guild.name || ""} - ${message.author ? `${client.l.by} ${message.author.username}` : ""}`);
+                .setFooter(`© ${client.config.getSetting("servername") || message.guild && message.guild.name || ""} - ${message.author ? `${client.l._by} ${message.author.username}` : ""}`);
         }
 
         message.error = (text) => {
             return message.channel.send(message.embed()
-                .setTitle(text)
+                .setTitle(text == "noMember" ? client.l.err.noMember : text == "noPerms" ? client.l.err.noPerms.replace("%COMMAND% :\n%MISSING%", "this command.") : text)
                 .setColor("#fc0303")
             )
         }
@@ -36,7 +36,7 @@ module.exports = exports = class MessageFunctions {
             message.canModifyQueue = () => {
                 const { channelID } = message.member.voice;
                 if (!channelID) {
-                    message.error(client.l.err.notInVoice)
+                    message.error(client.l.err.notInVoice);
                     return false;
                 }
                 const botChannel = message.member.guild.voice ? message.member.guild.voice.channelID : null;
@@ -49,7 +49,7 @@ module.exports = exports = class MessageFunctions {
             }
 
             message.getMember = (member) => {
-                return message.mentions.members.first() || message.guild.members.cache.get(member) || message.guild.members.cache.find(m => m.user.username.toLowerCase().includes(member));
+                return message.mentions.members.first() || message.guild.members.cache.get(member) || message.guild.members.cache.find(m => m.user.username.toLowerCase().includes(member ? member.toLowerCase() : member)) || message.guild.members.cache.find(m => m.user.tag.toLowerCase().includes(member ? member.toLowerCase() : member));
             }
 
             message.getChannel = (channel) => {
@@ -70,14 +70,14 @@ module.exports = exports = class MessageFunctions {
                 if (message.member.hasPermission("ADMINISTRATOR")) return true;
                 let mod = message.guild.roles.cache.find(r => r.name.toLowerCase().includes("moderator"));
                 if (!mod) return false;
-                return memberPos >= mod.rawPosition
+                return memberPos >= mod.rawPosition;
             }
 
             message.member.isAdmin = () => {
                 if (message.member.hasPermission("ADMINISTRATOR")) return true;
                 let admin = message.guild.roles.cache.find(r => r.name.toLowerCase().includes("admin"));
                 if (!admin) return false;
-                return memberPos >= admin.rawPosition
+                return memberPos >= admin.rawPosition;
             }
 
             message.member.highestPos = () => {
@@ -86,6 +86,15 @@ module.exports = exports = class MessageFunctions {
         }
 
         if (client.db) {
+            message.loadMember = async function (member) {
+                let settings = await client.db.get(`${message.guild.id}-${member.user.id}`) || client.config.getSetting("settings").user;
+                return settings;
+            }
+            message.updateMember = async function (member, settings) {
+                await client.db.set(`${message.guild.id}-${member.user.id}`, settings || member.user.settings);
+                return true;
+            }
+            if (!message.author) return message;
             if (!message.author.settings) {
                 message.author.settings = client.db.get(`${message.guild.id}-${message.author.id}`);
                 if (!message.author.settings) {
@@ -101,7 +110,7 @@ module.exports = exports = class MessageFunctions {
 
             if (message.guild) {
                 message.guild.settings = client.db.get(`guild-${message.guild.id}`);
-                if (!message.guild.settings || !message.guild.settings.prefix) message.guild.settings = client.configuration.getSetting("guildSettings");
+                if (!message.guild.settings || !message.guild.settings.prefix) message.guild.settings = client.config.getSetting("settings").guild;
                 message.guild.updateDB = async function () {
                     client.db.set(`guild-${message.guild.id}`, message.guild.settings);
                     return message.author.guildSettings;

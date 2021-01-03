@@ -1,11 +1,11 @@
 const { Client } = require("discord.js");
 const { resolve } = require("path");
-var merge = require('lodash.merge');
+const merge = require('deepmerge');
 
 module.exports = exports = class Framework {
 	constructor(settings) {
 		this.client = new Client();
-		this.client.configuration = new (require("./configuration"))();
+		this.client.config = new (require("./configuration"))();
 		this.client.handler = new (require("./util/handler"));
 
 		this.configure(settings);
@@ -14,7 +14,7 @@ module.exports = exports = class Framework {
 
 		this.client.scheduler = new (require("./scheduler"))(this);
 
-		if (this.client.configuration.getSetting('commands')) {
+		if (this.client.config.getSetting('commands')) {
 			this.client.handler.add('command', {
 				'callback': this.client.util.msghandler,
 				'context': this.client,
@@ -23,20 +23,19 @@ module.exports = exports = class Framework {
 		}
 	}
 	configure(settings) {
-		this.client.configuration.load(settings);
+		this.client.config.load(settings);
 
 		this.client.on("ready", () => {
-			if (this.client.status) this.client.user.setActivity(this.client.status, { type: this.client.statusType });
+			if (this.client.config.getSetting("status")) this.client.user.setActivity(this.client.config.getSetting("status"), { type: this.client.config.getSetting("statusType") });
 
 			console.log(this.client.chalk.black.bgGreen(this.client.l.ready.replace("%CLIENT%", this.client.user.username).replace("%COMMANDS%", this.client.commands.size).replace("%EVENTS%", this.client.events.size).replace("%DEFAULT%", this.client.defaultCommands.size)));
 		})
-		this.client.on("message", message => {
-			this.client.handler.handleAll(message);
-		})
+		this.client.on("message", message => this.client.handler.handleAll(message))
+
 		return this;
 	}
 	async connect() {
-		await this.client.login(this.client.configuration.getSetting("token"));
+		await this.client.login(this.client.config.getSetting("token"));
 		return this;
 	}
 
