@@ -16,19 +16,17 @@ module.exports = exports = class MessageFunctions {
                 .setColor("#fc0303")
             )
         }
+
         message.succes = (text) => {
-            return message.channel.send(message.embed()
-                .setDescription(text)
-            )
+            return message.channel.send(message.embed().setDescription(text))
         }
-        message.sendEmbed = ({ title: title, desc: desc, color: color }) => {
-            let embed = message.embed();
+
+        message.sendEmbed = ({ embed: embed = message.embed(), title: title, desc: desc, color: color, footer: footer }) => {
             if (title) embed.setTitle(title);
-            if (desc) {
-                if (desc.length >= 2048) desc = desc.substr(0, 2044) + "...";
-                embed.setDescription(desc);
-            }
+            if (desc && desc.length >= 2048) embed.setDescription(desc.substr(0, 2044) + "...");
+            else if (desc >= 2048) embed.setDescription(desc);
             if (color) embed.setColor(color);
+            if (footer) embed.setFooter(footer);
             return message.channel.send(embed);
         }
 
@@ -86,14 +84,16 @@ module.exports = exports = class MessageFunctions {
         }
 
         if (client.db) {
-            message.loadMember = async function (member) {
+            message.loadMemberSettings = async function (member) {
                 let settings = await client.db.get(`${message.guild.id}-${member.user.id}`) || client.config.getSetting("settings").user;
                 return settings;
             }
-            message.updateMember = async function (member, settings) {
+
+            message.updateMemberSettings = async function (member, settings) {
                 await client.db.set(`${message.guild.id}-${member.user.id}`, settings || member.user.settings);
                 return true;
             }
+
             if (!message.author) return message;
             if (!message.author.settings) {
                 message.author.settings = client.db.get(`${message.guild.id}-${message.author.id}`);

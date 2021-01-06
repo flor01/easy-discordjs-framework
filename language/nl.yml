@@ -13,6 +13,7 @@ err:
   noMember: "Je hebt geen member meegegeven!"
   notEnoughArgs: "Je hebt niet genoeg argumenten meegegeven!"
   useLikeThis: "Gebruik het commando zo:"
+  noUserPerms: "Jij kan dit niet doen! Je moet minstens %ROLE%+ zijn om dit commando te gebruiken!"
 
 commands: 
   kick:

@@ -12,6 +12,7 @@ err:
   noMember: "You didn't provide a member!"
   notEnoughArgs: "You didn't provide enough arguments!"
   useLikeThis: "Use the command like this:"
+  noUserPerms: "You can't do this! You need to be %ROLE%+ for this command!"
 commands:
   kick:
     succes: "I successfully kicked %USER%!"

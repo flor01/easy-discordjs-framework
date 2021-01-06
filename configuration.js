@@ -12,7 +12,7 @@ module.exports = class Configuration {
     }
 
     load(config) {
-        const { token, language, defaultPrefix, database, settings, igbots, igdm, commands, events, status, statusType, logs } = config;
+        const { token, language, defaultPrefix, database, settings, igbots, igdm, commands, events, status, statusType, logs, messageFlags } = config;
         this.data = {
             token: token,
             language: language || "en",
@@ -32,8 +32,8 @@ module.exports = class Configuration {
                 log: logs && logs.log || "",
                 moderation: logs && logs.moderation || "",
             },
+            messageFlags: messageFlags || true,
         }
-        console.log(this.data);
         return this.data;
     }
 }
