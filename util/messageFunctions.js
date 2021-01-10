@@ -83,7 +83,7 @@ module.exports = exports = class MessageFunctions {
             }
         }
 
-        if (client.db) {
+        if (client.db && message.guild) {
             message.loadMemberSettings = async function (member) {
                 let settings = await client.db.get(`${message.guild.id}-${member.user.id}`) || client.config.getSetting("settings").user;
                 return settings;
@@ -108,15 +108,14 @@ module.exports = exports = class MessageFunctions {
             }
             message.author.updateDB();
 
-            if (message.guild) {
-                message.guild.settings = client.db.get(`guild-${message.guild.id}`);
-                if (!message.guild.settings || !message.guild.settings.prefix) message.guild.settings = client.config.getSetting("settings").guild;
-                message.guild.updateDB = async function () {
-                    client.db.set(`guild-${message.guild.id}`, message.guild.settings);
-                    return message.author.guildSettings;
-                }
-                message.guild.updateDB();
+            message.guild.settings = client.db.get(`guild-${message.guild.id}`);
+            if (!message.guild.settings || !message.guild.settings.prefix) message.guild.settings = client.config.getSetting("settings").guild;
+            message.guild.updateDB = async function () {
+                client.db.set(`guild-${message.guild.id}`, message.guild.settings);
+                return message.author.guildSettings;
             }
+            message.guild.updateDB();
+
         }
 
         return message;

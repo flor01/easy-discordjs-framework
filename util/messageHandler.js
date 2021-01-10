@@ -3,22 +3,20 @@ module.exports = exports = class MessageHandler extends require("./messageFuncti
         super(message, client);
         if (client.igbots && message.author.bot) return;
         if (!message.content && !message.embeds) return;
-
-        const prefix = message.guild.settings.prefix || client.config.getSetting("defaultPrefix");
-
-        this.args = message.content.slice(prefix.length).trim().split(/ +/);
-        this.command = this.args.shift().toLowerCase();
-
-        if (client.config.getSetting("messageFlags")) {
-            message.flags = [];
-            while (this.args[0] && this.args[0][0] === "-") {
-                message.flags.push(this.args.shift().slice(1));
-            }
-        }
-
         if (!client.igdm && message.channel.type == "dm") {
-
         } else {
+
+            const prefix = message.guild.settings.prefix || client.config.getSetting("defaultPrefix");
+
+            this.args = message.content.slice(prefix.length).trim().split(/ +/);
+            this.command = this.args.shift().toLowerCase();
+
+            if (client.config.getSetting("messageFlags")) {
+                message.flags = [];
+                while (this.args[0] && this.args[0][0] === "-") {
+                    message.flags.push(this.args.shift().slice(1));
+                }
+            }
 
             if (!this.command) return;
             let command = client.commands.get(this.command) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(this.command));
