@@ -32,6 +32,7 @@
   "bundleDependencies": false,
   "dependencies": {
     "chalk": "^4.1.0",
+    "deepmerge": "^4.2.2",
     "discord.js": "^12.5.1",
     "fsscanner": "^1.0.23",
     "js-yaml": "^3.14.1",

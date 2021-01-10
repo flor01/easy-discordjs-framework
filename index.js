@@ -21,6 +21,7 @@ module.exports = exports = class Framework {
 				"class": true
 			});
 		}
+		new (require("./util/clientFunctions"))(this.client);
 	}
 	configure(settings) {
 		this.client.config.load(settings);
@@ -84,7 +85,7 @@ module.exports = exports = class Framework {
 
 	registerModules(options = {}, settings) {
 		let defaultModules = {
-			moderation: { kick: true }, music: {}
+			moderation: { kick: true, ban: true }, music: {}
 		};
 		const modules = merge(defaultModules, options);
 
