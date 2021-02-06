@@ -30,7 +30,7 @@ module.exports = {
                 if (err) throw err;
                 results.forEach(file => {
                     let stats = statSync(file);
-                    if (stats.isDirectory()) cmdloader(`${file}`);
+                    if (stats.isDirectory()) this.cmdloader(`${file}`);
                     else {
                         let command = require(file);
                         commands.set(command.name, command);
