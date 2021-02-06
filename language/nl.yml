@@ -1,4 +1,4 @@
-ready: "%CLIENT% is klaar! Ik heb %COMMANDS% command(s), %EVENTS% event(s) en %DEFAULT% standaard commands ingeladen!"
+ready: "%CLIENT% is klaar! Ik heb %COMMANDS% command(s), %EVENTS% event(s) ingeladen!"
 lang: "NL"
 _reason: "reden"
 _by: "door"

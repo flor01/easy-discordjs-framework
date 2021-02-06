@@ -1,4 +1,4 @@
-ready: "%CLIENT% is ready! I've loaded %COMMANDS% command(s), %EVENTS% event(s) and %DEFAULT% default commands!"
+ready: "%CLIENT% is ready! I've loaded %COMMANDS% command(s), %EVENTS% event(s)!"
 lang: "EN"
 _reason: "reason"
 _by: "by"

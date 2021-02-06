@@ -1,101 +1,90 @@
 const { Client } = require("discord.js");
-const { resolve } = require("path");
-const merge = require('deepmerge');
+const chalk = require("chalk");
+module.exports = class Framework extends Client {
+    constructor(settings, options = {}) {
+        super(options);
+        this.util = {
+            load: require("./util/load"),
+            msghandler: require("./util/messageHandler"),
+            message: require("./util/messageFunctions"),
+            database: require("./util/database"),
+            handler: require("./util/handler"),
+        }
+        this.config = require("./configuration")(settings);
+        this.handler = this.util.handler;
+        this.load = this.util.load;
+        this.scheduler = require("./scheduler");
 
-module.exports = exports = class Framework {
-	constructor(settings) {
-		this.client = new Client();
-		this.client.config = new (require("./configuration"))();
-		this.client.handler = new (require("./util/handler"));
+        if (this.config.commands) this.commands = this.load.cmdloader();
+        if (this.config.events) this.events = this.load.eventloader(this);
+        this.l = this.load.language(settings.language);
 
-		this.configure(settings);
+        if (this.config.database) {
+            this.db = this.util.database;
+            this.db.isReady().then(() => console.log(chalk.greenBright("Database is ready!")));
+        }
+        if (this.config.commands) {
+            this.handler.add('command', {
+                'callback': this.util.msghandler,
+                'context': this,
+                "class": true
+            });
+        }
 
-		this.client.load = new (require("./util/load"))(this.client);
+        super.on("ready", () => {
+            if (this.config.status) this.user.setActivity(this.config.status, { type: this.config.statusType });
 
-		this.client.scheduler = new (require("./scheduler"))(this);
+            console.log(chalk.black.bgGreen(this.l.ready.replace("%CLIENT%", this.user.username).replace("%COMMANDS%", this.commands.size).replace("%EVENTS%", this.events.size)));
+        })
+        super.on("message", message => this.handler.handleAll(message));
 
-		if (this.client.config.getSetting('commands')) {
-			this.client.handler.add('command', {
-				'callback': this.client.util.msghandler,
-				'context': this.client,
-				"class": true
-			});
-		}
-		new (require("./util/clientFunctions"))(this.client);
-	}
-	configure(settings) {
-		this.client.config.load(settings);
+        require("./util/clientFunctions")(this);
+    }
+    async connect() {
+        await this.login(this.config.token);
+        return this;
+    }
 
-		this.client.on("ready", () => {
-			if (this.client.config.getSetting("status")) this.client.user.setActivity(this.client.config.getSetting("status"), { type: this.client.config.getSetting("statusType") });
+    disconnect() {
+        return this.destroy();
+    }
 
-			console.log(this.client.chalk.black.bgGreen(this.client.l.ready.replace("%CLIENT%", this.client.user.username).replace("%COMMANDS%", this.client.commands.size).replace("%EVENTS%", this.client.events.size).replace("%DEFAULT%", this.client.defaultCommands.size)));
-		})
-		this.client.on("message", message => this.client.handler.handleAll(message))
+    observe(event, callback) {
+        super.on(event, callback);
+        return this;
+    }
 
-		return this;
-	}
-	async connect() {
-		await this.client.login(this.client.config.getSetting("token"));
-		return this;
-	}
+    getClient() {
+        return this;
+    }
 
-	disconnect() {
-		return this.client.destroy();
-	}
+    getGuilds() {
+        return this.guilds.cache;
+    }
 
-	observe(event, callback) {
-		this.client.on(event, callback);
-		return this;
-	}
+    schedule(options) {
+        this.scheduler.schedule(options, this);
+        return this;
+    }
 
-	getClient() {
-		return this.client;
-	}
+    unschedule(task_name) {
+        this.scheduler.unschedule(task_name);
+        return this;
+    }
 
-	getGuilds() {
-		return this.client.guilds.cache;
-	}
+    addHandler(name, callback) {
+        this.handler.add(name, callback);
+        return this;
+    }
 
-	schedule(options) {
-		this.client.scheduler.schedule(options);
-		return this;
-	}
-
-	unschedule(task_name) {
-		this.client.scheduler.unschedule(task_name);
-		return this;
-	}
-
-	addHandler(name, callback) {
-		this.client.handler.add(name, callback);
-		return this;
-	}
-
-	bind(command, options) {
-		if (typeof command == "object") {
-			if (!command.name || !command.run) throw new Error("You didn't provide a command name/run function!");
-			this.client.commands.set(command.name, command);
-			return;
-		}
-		if (typeof options !== "object") throw new Error("You didn't provide any command options!");
-		this.client.commands.set(command, options);
-		return this;
-	}
-
-	registerModules(options = {}, settings) {
-		let defaultModules = {
-			moderation: { kick: true, ban: true }, music: {}
-		};
-		const modules = merge(defaultModules, options);
-
-		for (let module in modules) {
-			if (modules[module] === true) this.client.load.modulegrouploader(resolve(__dirname, `./commands/${module}`));
-			for (let command in modules[module]) {
-				const cmd = modules[module][command]
-				if (cmd === true) this.client.load.moduleloader(resolve(__dirname, `./commands/${module}/${command}.js`));
-			}
-		}
-		return this;
-	}
-} 
+    bind(command, options) {
+        if (typeof command == "object") {
+            if (!command.name || !command.run) throw new Error("You didn't provide a command name/run function!");
+            this.commands.set(command.name, command);
+            return;
+        }
+        if (typeof options !== "object") throw new Error("You didn't provide any command options!");
+        this.commands.set(command, options);
+        return this;
+    }
+}
