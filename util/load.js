@@ -37,11 +37,11 @@ module.exports = {
                     }
                 })
             })
-            return commands;
         }
+        return commands;
     },
     eventloader: function (client, dir = `${process.cwd()}/events`) {
-        let events = new Collection;
+        let events = new Collection();
         if (existsSync(dir)) {
             fsscanner.scan(dir, [fsscanner.criteria.pattern(".js"), fsscanner.criteria.type("F")], (err, results) => {
                 results.forEach(file => {
