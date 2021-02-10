@@ -1,5 +1,5 @@
 module.exports = (config) => {
-    const { token, language, defaultPrefix, database, settings, igbots, igdm, commands, events, status, statusType, logs, messageFlags } = config;
+    const { token, language, defaultPrefix, database, settings, igbots, igdm, commands, events, status, statusType, logs, messageFlags, embedColor } = config;
     data = {
         token: token,
         language: language || "en",
@@ -20,6 +20,7 @@ module.exports = (config) => {
             moderation: logs && logs.moderation || "",
         },
         messageFlags: messageFlags || true,
+        embedColor: embedColor
     }
     return data;
 }
