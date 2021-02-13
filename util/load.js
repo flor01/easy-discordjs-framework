@@ -32,6 +32,7 @@ module.exports = {
                     let stats = statSync(file);
                     if (stats.isDirectory()) this.cmdloader(`${file}`);
                     else {
+                        delete require.cache[require.resolve(file)];
                         let command = require(file);
                         commands.set(command.name, command);
                     }
