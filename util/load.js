@@ -1,7 +1,5 @@
 const fsscanner = require("fsscanner");
 const { existsSync, statSync, readFileSync } = require("fs");
-const { safeLoad } = require("js-yaml");
-const { resolve } = require("path");
 const { Collection } = require("discord.js");
 module.exports = {
     logAction: function (type, title, desc, files) {
@@ -15,12 +13,8 @@ module.exports = {
     },
     language: function (setting) {
         let l;
-        let languages = {
-            nl: readFileSync(resolve(__dirname, "../language/nl.yml"), "utf8"),
-            en: readFileSync(resolve(__dirname, "../language/en.yml"), "utf8")
-        };
-        if (setting.toLowerCase() == "nl") l = safeLoad(languages.nl)
-        else l = safeLoad(languages.en);
+        if (setting.toLowerCase() == "nl") l = readFileSync("../language/nl.yml");
+        else l = readFileSync("../language/en.yml");
         return l;
     },
     cmdloader: function (dir = `${process.cwd()}/commands`) {

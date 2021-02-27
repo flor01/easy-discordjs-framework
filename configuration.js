@@ -1,26 +1,24 @@
 module.exports = (config) => {
-    const { token, language, defaultPrefix, database, settings, igbots, igdm, commands, events, status, statusType, logs, messageFlags, embedColor } = config;
-    data = {
-        token: token,
-        language: language || "en",
-        defaultPrefix: defaultPrefix || "!",
-        database: database !== undefined ? database : true,
+    return {
+        token: config.token,
+        language: config.language || "en",
+        defaultPrefix: config.defaultPrefix || "!",
+        database: config.database !== undefined ? config.database : true,
         settings: {
-            guild: settings && settings.guild || { prefix: defaultPrefix || "!" },
-            user: settings && settings.user || {}
+            guild: config.settings && config.settings.guild || { prefix: config.defaultPrefix || "!" },
+            user: config.settings && config.settings.user || {}
         },
-        igbots: igbots !== undefined ? igbots : true,
-        igdm: igdm !== undefined ? igdm : true,
-        commands: commands !== undefined ? commands : true,
-        events: events !== undefined ? events : true,
-        status: status || "test",
-        statusType: statusType !== undefined ? statusType.toUpperCase() : "WATCHING",
+        igbots: config.igbots !== undefined ? config.igbots : true,
+        igdm: config.igdm !== undefined ? config.igdm : true,
+        commands: config.commands !== undefined ? config.commands : true,
+        events: config.events !== undefined ? config.events : true,
+        status: config.status || "test",
+        statusType: config.statusType !== undefined ? config.statusType.toUpperCase() : "WATCHING",
         logs: {
-            log: logs && logs.log || "",
-            moderation: logs && logs.moderation || "",
+            log: config.logs && config.logs.log || "",
+            moderation: config.logs && config.logs.moderation || "",
         },
-        messageFlags: messageFlags || true,
-        embedColor: embedColor
-    }
-    return data;
+        messageFlags: config.messageFlags || true,
+        embedColor: config.embedColor
+    };
 }

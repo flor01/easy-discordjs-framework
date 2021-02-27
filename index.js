@@ -1,5 +1,5 @@
 const { Client } = require("discord.js");
-const chalk = require("chalk");
+const { greenBright, black } = require("chalk");
 module.exports = class Framework extends Client {
     constructor(settings, options = {}) {
         super(options);
@@ -20,7 +20,7 @@ module.exports = class Framework extends Client {
 
         if (this.config.database) {
             this.db = this.util.database;
-            this.db.isReady().then(() => console.log(chalk.greenBright("Database is ready!")));
+            this.db.isReady().then(() => console.log(greenBright("Database is ready!")));
         }
         if (this.config.commands) {
             this.handler.add('command', {
@@ -33,7 +33,7 @@ module.exports = class Framework extends Client {
         super.on("ready", () => {
             if (this.config.status) this.user.setActivity(this.config.status, { type: this.config.statusType });
 
-            console.log(chalk.black.bgGreen(this.l.ready.replace("%CLIENT%", this.user.username).replace("%COMMANDS%", this.commands.size).replace("%EVENTS%", this.events.size)));
+            console.log(black.bgGreen(this.l.ready.replace("%CLIENT%", this.user.username).replace("%COMMANDS%", this.commands.size).replace("%EVENTS%", this.events.size)));
         })
         super.on("message", message => this.handler.handleAll(message));
 
@@ -69,7 +69,7 @@ module.exports = class Framework extends Client {
             return;
         }
         if (typeof options !== "object") throw new Error("You didn't provide any command options!");
-        this.commands.set(command, options);
+        this.commands.set(command.run || command, options);
         return this;
     }
 }
