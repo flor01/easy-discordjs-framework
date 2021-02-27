@@ -13,7 +13,6 @@ module.exports = class Framework extends Client {
         this.config = require("./configuration")(settings);
         this.handler = this.util.handler;
         this.load = this.util.load;
-        this.scheduler = require("./scheduler");
 
         if (this.config.commands) this.commands = this.load.cmdloader();
         if (this.config.events) this.events = this.load.eventloader(this);
@@ -54,22 +53,8 @@ module.exports = class Framework extends Client {
         return this;
     }
 
-    getClient() {
-        return this;
-    }
-
     getGuilds() {
         return this.guilds.cache;
-    }
-
-    schedule(options) {
-        this.scheduler.schedule(options, this);
-        return this;
-    }
-
-    unschedule(task_name) {
-        this.scheduler.unschedule(task_name);
-        return this;
     }
 
     addHandler(name, callback) {
