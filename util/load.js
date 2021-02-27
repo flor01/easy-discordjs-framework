@@ -1,4 +1,5 @@
 const fsscanner = require("fsscanner");
+const { resolve } = require("path");
 const { existsSync, statSync, readFileSync } = require("fs");
 const { Collection } = require("discord.js");
 module.exports = {
@@ -13,8 +14,8 @@ module.exports = {
     },
     language: function (setting) {
         let l;
-        if (setting.toLowerCase() == "nl") l = readFileSync("../language/nl.yml");
-        else l = readFileSync("../language/en.yml");
+        if (setting.toLowerCase() == "nl") l = JSON.parse(readFileSync(resolve(__dirname, "../language/nl.json"), "utf8"));
+        else l = JSON.parse(readFileSync(resolve(__dirname, "../language/en.json"), "utf8"))
         return l;
     },
     cmdloader: function (dir = `${process.cwd()}/commands`) {

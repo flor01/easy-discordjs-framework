@@ -34,7 +34,6 @@
     "chalk": "^4.1.0",
     "discord.js": "^12.5.1",
     "fsscanner": "^1.0.23",
-    "js-yaml": "^3.14.1",
     "sqlite3": "5.0.0"
   },
   "deprecated": false,
