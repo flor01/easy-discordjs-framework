@@ -20,6 +20,7 @@ module.exports = class Framework extends Client {
 
         if (this.config.database) {
             this.db = this.util.database;
+            this.db.start();
             this.db.isReady().then(() => console.log(greenBright("Database is ready!")));
         }
         if (this.config.commands) {

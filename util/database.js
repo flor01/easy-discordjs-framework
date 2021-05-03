@@ -1,20 +1,24 @@
 const sqlite3 = require("sqlite3");
 let memory = {};
 let ready = false;
-let sqlite = new sqlite3.Database(`database.sqlite`);
-let i = setInterval(() => {
-  if (!sqlite.open) return;
-  clearInterval(i);
-  sqlite.run("CREATE TABLE IF NOT EXISTS framework (key TEXT, value TEXT);", () => {
-    sqlite.all("SELECT * FROM framework;", (err, data) => {
-      if (err) throw err;
-      data.forEach(d => {
-        memory[d.key] = JSON.parse(d.value);
+let sqlite;
+
+function start() {
+  sqlite = new sqlite3.Database(`database.sqlite`);
+  let i = setInterval(() => {
+    if (!sqlite.open) return;
+    clearInterval(i);
+    sqlite.run("CREATE TABLE IF NOT EXISTS framework (key TEXT, value TEXT);", () => {
+      sqlite.all("SELECT * FROM framework;", (err, data) => {
+        if (err) throw err;
+        data.forEach(d => {
+          memory[d.key] = JSON.parse(d.value);
+        });
+        ready = true;
       });
-      ready = true;
     });
   });
-});
+}
 
 
 function isReady() {
@@ -63,4 +67,4 @@ function _delete(key) {
     });
   });
 }
-module.exports = { isReady, get, set, delete: _delete }
+module.exports = { start, isReady, get, set, delete: _delete }
