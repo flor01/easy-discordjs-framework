@@ -34,7 +34,7 @@ module.exports = class Framework extends Client {
         super.on("ready", () => {
             if (this.config.status) this.user.setActivity(this.config.status, { type: this.config.statusType });
 
-            console.log(black.bgGreen(this.l.ready.replace("%CLIENT%", this.user.username).replace("%COMMANDS%", this.commands.size).replace("%EVENTS%", this.events.size)));
+            console.log(black.bgGreen(this.l.ready.replace("%CLIENT%", this.user.username).replace("%COMMANDS%", this.commands ? this.commands.size : "0").replace("%EVENTS%", this.events ? this.events.size : "0")));
         })
         super.on("message", message => this.handler.handleAll(message));
 
